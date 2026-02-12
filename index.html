@@ -46,7 +46,7 @@ body{
     opacity:0;
 }
 
-/* Ventana pixel */
+/* Ventanas pixel */
 .pixel-window{
     position:absolute;
     width:340px;
@@ -57,7 +57,7 @@ body{
     text-align:center;
     transform:scale(0);
     opacity:0;
-    transition:0.4s;
+    transition:0.4s ease;
 }
 
 .pixel-window.show{
@@ -65,7 +65,7 @@ body{
     opacity:1;
 }
 
-/* Barra superior LOVE */
+/* Barra LOVE */
 .window-top{
     background:#ff9aa8;
     color:white;
@@ -104,6 +104,7 @@ button{
 .no{
     background:#eee;
     position:relative;
+    transition: transform 0.35s ease-out;
 }
 
 </style>
@@ -114,8 +115,8 @@ button{
 <!-- Carta inicial -->
 <img src="carta.png" id="startLetter" class="start-letter">
 
-<!-- Ventana mensaje -->
-<div class="pixel-window" id="window">
+<!-- Ventana pregunta -->
+<div class="pixel-window" id="questionWindow">
 
     <div class="window-top">LOVE.exe</div>
 
@@ -128,6 +129,21 @@ button{
         <button class="yes" onclick="sayYes()">YES</button>
         <button class="no" id="noBtn">NO</button>
     </div>
+
+</div>
+
+<!-- Ventana YES -->
+<div class="pixel-window" id="yesWindow">
+
+    <div class="window-top">LOVE.exe</div>
+
+    <p>💖 Wiiiiiii 💖</p>
+    <p>Nos vemos el sábado :3 ✨</p>
+
+    <img src="gatito.png" class="cat">
+
+    <br>
+    <button onclick="closeYes()">Cerrar</button>
 
 </div>
 
@@ -148,29 +164,45 @@ function createHeart(){
 }
 setInterval(createHeart,900);
 
-/* Carta -> ventana */
+/* Elementos */
 const startLetter=document.getElementById("startLetter");
-const windowBox=document.getElementById("window");
+const questionWindow=document.getElementById("questionWindow");
+const yesWindow=document.getElementById("yesWindow");
 
+/* Carta -> ventana pregunta */
 startLetter.onclick=()=>{
     startLetter.classList.add("hide");
     setTimeout(()=>{
-        windowBox.classList.add("show");
+        questionWindow.classList.add("show");
     },400);
 }
 
-/* Botón NO huye */
+/* Botón NO huye suave */
 const noBtn=document.getElementById("noBtn");
 
-noBtn.addEventListener("mouseover",()=>{
-    const x=Math.random()*200-100;
-    const y=Math.random()*150-75;
+noBtn.addEventListener("mouseenter",()=>{
+    const x=Math.random()*300-150;
+    const y=Math.random()*200-100;
     noBtn.style.transform=`translate(${x}px, ${y}px)`;
 });
 
-/* Botón YES */
+/* YES reemplaza ventana */
 function sayYes(){
-    alert("Nos vemos el sábado :3 💖");
+    questionWindow.classList.remove("show");
+
+    setTimeout(()=>{
+        yesWindow.classList.add("show");
+    },300);
+}
+
+/* Cerrar YES -> volver inicio */
+function closeYes(){
+    yesWindow.classList.remove("show");
+
+    setTimeout(()=>{
+        startLetter.classList.remove("hide");
+        noBtn.style.transform="translate(0,0)";
+    },300);
 }
 
 </script>
